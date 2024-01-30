@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+  Продукт: "{{ product }}..."
+{% endblock %}
+{% block content %}
+  <div class="container py-5">
+    <h1>
+      {% if request %}
+        {{ request }}
+      {% else %}
+        {{ recipe }}
+      {% endif %}
+    </h1>
+    {% for recipe in recipes_list %}
+      <article>
+        <ul>
+          <li class="list-group-item">
+            id рецепта: {{ recipe.id }} 
+          </li>  
+          <li class="list-group-item">
+            Название рецепта {{ recipe.name }}
+          </li>
+        </ul>
+    </article>
+    {% endfor %}
+  </div>
+{% endblock %}

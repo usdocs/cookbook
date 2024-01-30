@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'cookbook_api',
+    'cookbook',
     'recipes',
 ]
 
@@ -36,7 +36,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'cookbook_api.urls'
+ROOT_URLCONF = 'cookbook.urls'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
@@ -56,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cookbook_api.wsgi.application'
+WSGI_APPLICATION = 'cookbook.wsgi.application'
 
 
 # Database
@@ -115,6 +115,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Constants
 
-RECIPES_LIMIT = 1
 MIN_VALUE = 1
 MAX_VALUE = 32000

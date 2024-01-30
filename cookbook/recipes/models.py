@@ -7,30 +7,18 @@ class Product(models.Model):
     name = models.CharField(
         'Название продукта',
         max_length=200,
-    )
-    measurement_unit = models.CharField(
-        'Единица измерения',
-        max_length=200,
-        default="г",
+        unique=True,
     )
     cooked_dishes = models.PositiveSmallIntegerField(
         'Количество приготовленных блюд',
-        validators=[
-            MinValueValidator(settings.MIN_VALUE),
-        ],
+        default=0,
     )
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'measurement_unit'],
-                name='unique_measurement_unit_product'
-            )
-        ]
         ordering = ['-id']
 
     def __str__(self):
-        return f'{self.name}, {self.measurement_unit}'
+        return f'{self.name}'
 
 
 class Recipe(models.Model):
@@ -39,10 +27,10 @@ class Recipe(models.Model):
         max_length=256,
     )
 
-    ingredients = models.ManyToManyField(
+    product = models.ManyToManyField(
         Product,
         through='RecipeProduct',
-        related_name='product',
+        related_name='products',
         verbose_name='Используемые продукты в рецепте'
     )
 
@@ -57,7 +45,8 @@ class RecipeProduct(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name='Ингредиент'
+        related_name='product_recipe',
+        verbose_name='Продукт'
     )
     recipe = models.ForeignKey(
         Recipe,
@@ -66,7 +55,7 @@ class RecipeProduct(models.Model):
         verbose_name='Рецепт'
     )
     weight = models.PositiveSmallIntegerField(
-        'Вес продукта',
+        'Вес продукта в граммах',
         validators=[
             MinValueValidator(settings.MIN_VALUE),
             MaxValueValidator(settings.MAX_VALUE)
@@ -76,11 +65,11 @@ class RecipeProduct(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['ingredient', 'recipe'],
-                name='unique_recipe_ingredient'
+                fields=['product', 'recipe'],
+                name='unique_recipe_product'
             )
         ]
         ordering = ['-id']
 
     def __str__(self):
-        return f'{self.ingredient} {self.recipe}'
+        return f'{self.product} {self.recipe}'
