@@ -8,7 +8,7 @@ def show_recepes_without_product(request):
     template = 'show_recepes_without_product.html'
     if 'product_id' not in request.GET:
         context = {
-            'request': 'В запросе должны быть параметры product_id',
+            'empty': 'В запросе должны быть параметры product_id',
         }
         return render(request, template, context)
     product = get_object_or_404(Product, id=request.GET.get('product_id'))
@@ -36,26 +36,19 @@ def add_product_to_recipe(request):
         'weight' not in request.GET
     ):
         context = {
-            'request': 'В запросе должны быть параметры recipe_id, '
-                       'product_id, weigh',
+            'empty': 'В запросе должны быть параметры recipe_id, '
+                     'product_id, weight',
         }
         return render(request, template, context)
     recipe = get_object_or_404(Recipe, id=request.GET.get('recipe_id'))
     product = get_object_or_404(Product, id=request.GET.get('product_id'))
     weight = request.GET.get('weight')
-    recipe_product = RecipeProduct.objects.filter(
+    recipe_product, created = RecipeProduct.objects.get_or_create(
         recipe=recipe,
         product=product
     )
-    if recipe_product:
-        recipe_product.update(weight=weight)
-        recipe_product = recipe_product.first()
-    else:
-        recipe_product = RecipeProduct.objects.create(
-            recipe=recipe,
-            product=product,
-            weight=weight
-        )
+    recipe_product.weight = weight
+    recipe_product.save()
     context = {
         'product': product,
         'recipe_product': recipe_product,
@@ -68,7 +61,7 @@ def cook_recipe(request):
     template = 'cook_recipe.html'
     if 'recipe_id' not in request.GET:
         context = {
-            'request': 'В запросе должны быть параметры recipe_id',
+            'empty': 'В запросе должны быть параметры recipe_id',
         }
         return render(request, template, context)
     recipe = get_object_or_404(Recipe, id=request.GET.get('recipe_id'))

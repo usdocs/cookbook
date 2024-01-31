@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 
@@ -56,8 +56,8 @@ class RecipeProduct(models.Model):
     )
     weight = models.PositiveSmallIntegerField(
         'Вес продукта в граммах',
+        default=0,
         validators=[
-            MinValueValidator(settings.MIN_VALUE),
             MaxValueValidator(settings.MAX_VALUE)
         ],
     )
