@@ -43,12 +43,13 @@ def add_product_to_recipe(request):
     recipe = get_object_or_404(Recipe, id=request.GET.get('recipe_id'))
     product = get_object_or_404(Product, id=request.GET.get('product_id'))
     weight = request.GET.get('weight')
-    recipe_product, created = RecipeProduct.objects.get_or_create(
+    recipe_product, created = RecipeProduct.objects.update_or_create(
         recipe=recipe,
-        product=product
+        product=product,
+        defaults={
+            'weight': weight,
+        }
     )
-    recipe_product.weight = weight
-    recipe_product.save()
     context = {
         'product': product,
         'recipe_product': recipe_product,

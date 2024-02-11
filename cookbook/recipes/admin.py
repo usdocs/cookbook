@@ -8,9 +8,16 @@ class RecipeProductInline(admin.TabularInline):
     extra = 0
 
 
-class RecipeAdmin(admin.ModelAdmin):
+class ListDisplayAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'id',
+    )
+
+
+class RecipeAdmin(ListDisplayAdmin):
     inlines = (RecipeProductInline,)
 
 
-admin.site.register(Product)
+admin.site.register(Product, ListDisplayAdmin)
 admin.site.register(Recipe, RecipeAdmin)
